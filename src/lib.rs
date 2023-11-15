@@ -3,6 +3,7 @@ pub mod animal;
 pub mod locales;
 pub mod faker;
 pub mod fake_string;
+pub mod fake_number;
 
 #[cfg(doctest)]
 /// `cat` random cat

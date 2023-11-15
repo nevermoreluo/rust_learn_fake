@@ -2,16 +2,16 @@ use rand::Rng;
 
 pub struct FakeString;
 
-const BINARY_CHAR: &'static str = "01";
-const OCTAL_CHAR: &str = "01234567";
-const NUMERIC_CHAR: &str = "0123456789";
+// const BINARY_CHAR: &'static str = "01";
+// const OCTAL_CHAR: &str = "01234567";
+// const NUMERIC_CHAR: &str = "0123456789";
+// const HEXADECIMAL_CHAR : &str = "0123456789abcdefABCDEF";
 // const UPPER_ALPHA_CHAR: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 // const LOWER_ALPHA_CHAR: &str = "abcdefghijklmnopqrstuvwxyz";
 pub const ALPHA_CHAR: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const ALPHA_NUMERIC_CHAR: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 const SYMBOL_CHAR: &str = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 const ALPHA_NUMERIC_SYMBOL_CHAR: &str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
-const HEXADECIMAL_CHAR : &str = "0123456789abcdefABCDEF";
 const UUID_CHAR: &str = "0123456789abcdef";
 
 
@@ -30,7 +30,33 @@ impl FakeString {
             let random_char = rng.gen_range(0..chars.len());
             result.push(chars[random_char]);
         }
+        result
+    }
 
+    fn by_format(max_digit: u8, length: usize) -> String {
+        let mut rng = rand::thread_rng();
+        let mut result = String::new();
+        for _ in 0..length {
+            let digit: u8 = rng.gen_range(0..=max_digit);
+            match max_digit {
+                1 => {
+                    result.push_str(&format!("{:b}", digit));
+                },
+                7 => {
+                    result.push_str(&format!("{:o}", digit));
+                },
+                9 => {
+                    result.push_str(&format!("{}", digit));
+                },
+                15 => {
+                    result.push_str(&format!("{:X}", digit));
+                },
+                _ => {
+                    panic!("unexpect digit")
+                }
+            }
+            
+        }
         result
     }
 
@@ -43,19 +69,20 @@ impl FakeString {
     }
 
     pub fn binary(&self, length: usize) -> String {
-        FakeString::from_characters(BINARY_CHAR, length)
+        // FakeString::from_characters(BINARY_CHAR, length)
+        FakeString::by_format(1, length)
     }
 
     pub fn octal(&self, length: usize) -> String {
-        FakeString::from_characters(OCTAL_CHAR, length)
+        FakeString::by_format(7, length)
     }
 
-    pub fn hexadecimal(&self, length: usize) -> String {
-        FakeString::from_characters(HEXADECIMAL_CHAR, length)
+    pub fn hex(&self, length: usize) -> String {
+        FakeString::by_format(15, length)
     }
 
     pub fn numeric(&self, length: usize) -> String {
-        FakeString::from_characters(NUMERIC_CHAR, length)
+        FakeString::by_format(9, length)
     }
 
     pub fn sample(&self, length: usize) -> String {

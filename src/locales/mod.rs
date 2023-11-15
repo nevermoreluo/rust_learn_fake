@@ -5,6 +5,7 @@ pub use zh_cn::*;
 pub mod en;
 pub use en::*;
 
+pub type DefaultLang = EN;
 
 pub trait Data {
     
